@@ -1,0 +1,253 @@
+{
+  "rasa_nlu_data": {
+    "common_examples": [
+      {
+        "intent": "advice",
+        "text": "I want some advices of tommorrow's weather."
+      },
+      {
+        "intent": "advice",
+        "text": "Should I mind anything tommorrow?"
+      },
+      {
+        "intent": "advice",
+        "text": "I am going out next day, what should I bring?"
+      },
+      {
+        "intent": "advice",
+        "text": "How is the weather tommorrow?"
+      },
+      {
+        "intent": "advice",
+        "text": "I have a meeting tommorow noon, any advices?"
+      },
+      {
+        "intent": "advice",
+        "text": "What preperations do you advice for tommorrow?"
+      },
+      {
+        "intent": "advice",
+        "text": "What should I prepare for tommorrow?"
+      },
+      {
+        "intent": "detailed",
+        "text": "I want to see detailed weather report."
+      },
+      {
+        "intent": "detailed",
+        "text": "I need to know more detailed information of weather."
+      },
+      {
+        "intent": "detailed",
+        "text": "Can you show me more information?"
+      },
+      {
+        "intent": "detailed",
+        "text": "I would like to see other information of the weather."
+      },
+      {
+        "intent": "detailed",
+        "text": "How about other indexs?"
+      },
+      {
+        "intent": "detailed",
+        "text": "Tell me something else."
+      },
+      {
+        "intent": "detailed",
+        "text": "I want to see detailed weather report."
+      },
+      {
+        "intent": "detailed",
+        "text": "Give more information."
+      },
+      {
+        "intent": "forecast",
+        "text": "I want to know the weather of next few days."
+      },
+      {
+        "intent": "forecast",
+        "text": "How is the weather going to be?"
+      },
+      {
+        "intent": "forecast",
+        "text": "I want to see the forecast."
+      },
+      {
+        "intent": "forecast",
+        "text": "What about the weather in next five days?"
+      },
+      {
+        "intent": "forecast",
+        "text": "Show me the weather report."
+      },
+      {
+        "intent": "forecast",
+        "text": "How about the forecast?"
+      },
+      {
+        "intent": "forecast",
+        "text": "I would like to know the forecast."
+      },
+      {
+        "intent": "forecast",
+        "text": "Show me how is the weather like in the future."
+      },
+      {
+        "intent": "affirm",
+        "text": "yes"
+      },
+      {
+        "intent": "affirm",
+        "text": "yep"
+      },
+      {
+        "intent": "affirm",
+        "text": "yeah"
+      },
+      {
+        "intent": "affirm",
+        "text": "indeed"
+      },
+      {
+        "intent": "affirm",
+        "text": "that's right"
+      },
+      {
+        "intent": "affirm",
+        "text": "ok"
+      },
+      {
+        "intent": "affirm",
+        "text": "great"
+      },
+      {
+        "intent": "affirm",
+        "text": "right, thank you"
+      },
+      {
+        "intent": "affirm",
+        "text": "correct"
+      },
+      {
+        "intent": "affirm",
+        "text": "great choice"
+      },
+      {
+        "intent": "affirm",
+        "text": "sounds really good"
+      },
+      {
+        "intent": "choose_city",
+        "entities": [
+          {
+            "start": 10,
+            "end": 16,
+            "value": "London",
+            "entity": "city"
+          }
+        ],
+        "text": "I live in London."
+      },
+      {
+        "intent": "choose_city",
+        "entities": [
+          {
+            "start": 14,
+            "end": 21,
+            "value": "Beijing",
+            "entity": "city"
+          }
+        ],
+        "text": "My home is in Beijing."
+      },
+      {
+        "intent": "choose_city",
+        "entities": [
+          {
+            "start": 30,
+            "end": 36,
+            "value": "Berlin",
+            "entity": "city"
+          }
+        ],
+        "text": "I want to know the weather of Berlin."
+      },
+      {
+        "intent": "choose_city",
+        "entities": [
+          {
+            "start": 22,
+            "end": 28,
+            "value": "London",
+            "entity": "city"
+          }
+        ],
+        "text": "How is the weather of London?"
+      },
+      {
+        "intent": "choose_city",
+        "entities": [
+          {
+            "start": 35,
+            "end": 43,
+            "value": "New York",
+            "entity": "city"
+          }
+        ],
+        "text": "I would lie to know the weather of New York."
+      },
+      {
+        "intent": "choose_city",
+        "entities": [
+          {
+            "start": 15,
+            "end": 19,
+            "value": "Rome",
+            "entity": "city"
+          }
+        ],
+        "text": "My house is in Rome."
+      },
+      {
+        "intent": "choose_city",
+        "entities": [
+          {
+            "start": 8,
+            "end": 13,
+            "value": "Paris",
+            "entity": "city"
+          }
+        ],
+        "text": "I am in Paris now."
+      },
+      {
+        "intent": "choose_city",
+        "entities": [
+          {
+            "start": 10,
+            "end": 20,
+            "value": "Copenhagen",
+            "entity": "city"
+          }
+        ],
+        "text": "I live in Copenhagen currently."
+      },
+      {
+        "intent": "choose_city",
+        "entities": [
+          {
+            "start": 12,
+            "end": 17,
+            "value": "Tokyo",
+            "entity": "city"
+          }
+        ],
+        "text": "Now I am in Tokyo."
+      }
+    ],
+    "regex_features": [],
+    "lookup_tables": [],
+    "entity_synonyms": []
+  }
+}

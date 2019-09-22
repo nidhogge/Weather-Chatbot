@@ -1,0 +1,159 @@
+from rasa_nlu.model import Interpreter
+import requests
+import json
+
+
+# trainer = Trainer(config.load("config_spacy.yml"))
+
+# # Load the training data
+# training_data = load_data('trainingdata.json')
+
+# # Create an interpreter by training the model
+# interpreter = trainer.train(training_data)
+
+
+headers = {
+    'x-rapidapi-host': "community-open-weather-map.p.rapidapi.com",
+    'x-rapidapi-key': "0082dc76cdmsh64dccca57a89563p15b29ejsnea4004879ee4"
+    }
+
+global choosed_response
+global choosed_city
+interpreter = Interpreter.load('models/Chatbot/demo/')
+
+
+def give_advice(message):
+    result = ""
+    rain = 1
+    temp = 0
+    for i in range(8):
+        if message['list'][i]['weather'][0]['main'] == 'Rain':
+            rain = rain*0
+        else : rain = rain*1
+        temp = temp + message['list'][i]['main']['temp']-273
+    temp = temp/8
+    if rain == 1 :
+        result= result + "There might be rains in the next 24 hours, please take your umbrella."
+    else:
+        result = result+ "The possibility of raining in the next 24 hours is low."
+    if temp < 0:
+        result = result + " Tommorrow will be very cold, please keep warm."
+    if temp<10:
+        result = result + " Tommorrow will be cold, be careful of getting cold."
+    elif temp<18:
+        result = result + " Tommorrow will be a cool and nice day."
+    elif temp< 26:
+        result = result + " Tommorrow wil be a warm and nice day."
+    elif temp<32:
+        result = result + " Tommorrow will be hot, please drink enough water."
+    else :
+        result = result + " Tommorrow will be very hot, be careful of getting heat stroke."
+    return result
+
+
+def response_gen(city, intent):
+    global choosed_response
+    global choosed_city
+    if intent == "choose_city":
+        choosed_city = city
+        url = "https://community-open-weather-map.p.rapidapi.com/weather"
+        querystring = {"callback": "test", "id": "2172797", "units": "\"metric\" or \"imperial\"", "mode": "xml, html",
+                       "q": city}
+        response = requests.request("GET", url, headers=headers, params=querystring)
+        response = response.text
+        choosed_response = response
+        response = json.loads(response[5:len(response) - 1])
+        result = "The current weather of " + city + " is " + response['weather'][0][
+            'description'] + ". the average temperature is " + str(
+            response['main']['temp']) + "K, the highest temprature is " + str(
+            response['main']['temp_max']) + "K, the lowest temprature is " + str(response['main'][
+                                                                                     'temp_min']) + "K. Would you like to know more detailed weather or forecast of next 5 days?"
+
+    elif intent == "detailed":
+        response = json.loads(choosed_response[5:len(choosed_response) - 1])
+        result = "The humidity is " + str(response['main']['humidity']) + ", the pressure is " + str(
+            response['main']['pressure']) + ", the visibility is " + str(
+            response['visibility']) + ", the wind speed is " + str(
+            response['wind']['speed']) + ", the wind direction is degree " + str(
+            response['wind']['deg']) + ". Is there anything else you what to know?"
+
+    elif intent == "forecast":
+        url = "https://community-open-weather-map.p.rapidapi.com/forecast"
+        querystring = {"q": city}
+        response = requests.request("GET", url, headers=headers, params=querystring)
+        city = choosed_city
+        response = json.loads(response.text)
+        result = ""
+        for i in range(40):
+            result = result + response['list'][i]['dt_txt'] + "\n"
+            result = result + response['list'][i]['weather'][0]['description'] + " " + str(
+                response['list'][i]['main']['temp']) + "K\n"
+    elif intent == "advice":
+        url = "https://community-open-weather-map.p.rapidapi.com/forecast"
+        city = choosed_city
+        querystring = {"q": city}
+        response = requests.request("GET", url, headers=headers, params=querystring)
+        response = json.loads(response.text)
+        result = give_advice(response)
+    return result
+
+
+def interpret_msg(message):
+    msg=interpreter.parse(message)
+    intent=msg['intent']['name']
+    if len(msg['entities'])!= 0:
+        entity=msg['entities'][0]['value']
+    else :entity = "none"
+    return intent, entity
+
+
+def respond(state, message, policy):
+    intent, entity = interpret_msg(message)
+    (new_state, response) = policy[(state, intent)]
+    if response == "require_generating":
+        response = response_gen(entity, intent)
+    return new_state, response
+
+
+INIT=0
+CHOOSED=1
+
+global state
+state = INIT
+
+
+def policyrule():
+    policy = {
+        (INIT, "none"): (INIT, "I'm sorry - I'm not sure how to help you."),
+        (INIT, "choose_city"): (CHOOSED, "require_generating"),
+
+        (CHOOSED, "none"): (CHOOSED, "I'm sorry - I'm not sure how to help you."),
+        (CHOOSED, "choose_city"): (CHOOSED, "require_generating"),
+        (CHOOSED, "advice"): (CHOOSED, "require_generating"),
+        (CHOOSED, "detailed"): (CHOOSED, "require_generating"),
+        (CHOOSED, "forecast"): (CHOOSED, "require_generating"),
+        (CHOOSED, "thankyou"): (INIT, "you are welcome."),
+    }
+    return policy
+
+
+def send_message(message):
+    global state
+    state,msg = respond(state, message, policyrule())
+    return msg
+
+
+from wxpy import *
+
+bot = Bot()
+
+my_friend = bot.friends().search('Guo_')[0]
+
+
+@bot.register(my_friend)
+def my_friednd_message(msg):
+    msg = str(msg.text)
+    return send_message(msg)
+
+
+embed()
